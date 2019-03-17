@@ -1,0 +1,27 @@
+version: '2'
+
+services:
+  traefik:
+    image: traefik:alpine
+    restart: always
+    ports:
+      - 80:80
+#      - 8080:8080              # traefik web UI, for debugging only!
+      - 443:443
+    networks:
+      - traefik-backend         # set the docker network
+    environment:                
+      - AZURE_CLIENT_ID         # Define the following values in        
+      - AZURE_CLIENT_SECRET     # an '.env' file right beside this
+      - AZURE_SUBSCRIPTION_ID   # compose file if you use Azure
+      - AZURE_TENANT_ID         # To be adjusted for another provider
+      - AZURE_RESOURCE_GROUP
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./traefik.toml:/etc/traefik/traefik.toml
+      - ./acme.json:/acme.json
+    container_name: traefik
+
+networks:
+  traefik-backend:              # refer to the network
+    external: true

@@ -1,0 +1,51 @@
+logLevel = "info"
+defaultEntryPoints = ["https","http"]
+
+# Enable if you need an access log: 
+[accessLog]
+
+# WEB interface of Traefik - it will show web page with overview of frontend and backend configurations
+# Should not be used in production. If you enable it, ensure  port 8080 is also exported in the docker-compose.yml
+
+#[web]
+#address = ":8080"
+
+# Listen on port 80 and 443. 
+# 80 redirects to 443, only https is used
+[entryPoints]
+
+  [entryPoints.http]
+    address = ":80"
+
+    [entryPoints.http.redirect]
+    entryPoint = "https"
+
+  [entryPoints.https]
+  address = ":443"
+    [entryPoints.https.tls]
+
+# Use docker backend
+[docker]
+  endpoint = "unix:///var/run/docker.sock"
+  watch = true
+  exposedByDefault = false
+  network = "traefik-backend" # be to use the correct network here
+
+# Let's Encrypt stuff below this point:
+[acme]
+  email = "admin@foo.com"
+  storage = "/acme.json"
+  acmeLogging = true       # Helps ifthere are issues with certificates
+  entryPoint = "https"
+
+  [acme.dnsChallenge]
+    provider = "azure"     # You have to change this to your DNS provider
+    delayBeforeCheck = 0
+
+  [[acme.domains]]
+    main = "*.foo-pages.com"
+#    sans = ["flowerwcs.com"]     # uncomment if you want to host 
+                                  # https://foo-pages.com on this server
+  [[acme.domains]]
+    main = "gitlab.foo.com"       # again, adjust if you also want to
+    sans = ["registry.foo.com"]   # host https://foo.com on this server
