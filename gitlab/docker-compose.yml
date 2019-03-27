@@ -6,36 +6,36 @@ services:
     image: 'gitlab/gitlab-ce:latest'
     restart: always
     expose:
-      - 5000 # gitlab port
-      - 5001 # registry port
-      - 5002 # pages port
+      - 15000 # gitlab port
+      - 15001 # registry port
+      - 15002 # pages port
     labels:
       # Traefik Magic: Define three backends and linked domains
       traefik.enable: true
-      traefik.gitlab.port: 5000
+      traefik.gitlab.port: 15000
       traefik.gitlab.frontend.rule: 'Host:gitlab.foo.com'
-      traefik.registry.port: 5001
+      traefik.registry.port: 15001
       traefik.registry.frontend.rule: 'Host:registry.foo.com'
-      traefik.pages.port: 5002
+      traefik.pages.port: 15002
       traefik.pages.frontend.rule: 'HostRegexp: {subdomain:[a-z0-9]+}.foo-pages.com'
     environment:
       GITLAB_OMNIBUS_CONFIG: |
         external_url 'https://gitlab.foo.com'
         registry_external_url 'https://registry.foo.com'
         pages_external_url 'https://foo-pages.com'
-        nginx['listen_port'] = 5000
+        nginx['listen_port'] = 15000
         nginx['listen_https'] = false
         nginx['proxy_set_headers'] = {"X-Forwarded-Proto" => "https","X-Forwarded-Ssl" => "on"}
         gitlab_rails['registry_enabled'] = true
         registry['enable'] = true
         registry_nginx['enable'] = true
-        registry_nginx['listen_port'] = 5001
+        registry_nginx['listen_port'] = 15001
         registry_nginx['listen_https'] = false
         registry_nginx['proxy_set_headers'] = {"X-Forwarded-Proto" => "https","X-Forwarded-Ssl" => "on"}
         gitlab_rails['rack_attack_git_basic_auth'] = {
            'enabled' => false,
         }
-        pages_nginx['listen_port'] = 5002
+        pages_nginx['listen_port'] = 15002
         pages_nginx['listen_https'] = false
         pages_nginx['proxy_set_headers'] = {"X-Forwarded-Proto" => "https","X-Forwarded-Ssl" => "on"}
         gitlab_pages['inplace_chroot'] = true
