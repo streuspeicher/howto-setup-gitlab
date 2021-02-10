@@ -61,7 +61,7 @@ To have both docker-compose stacks connected, we have to create a dedicated dock
 
 
 ```sh
-$> docker create traefik-backend
+$> docker network create traefik-backend
 ```
 ### 3. Deploy Traefik 
 
