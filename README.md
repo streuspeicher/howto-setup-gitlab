@@ -149,13 +149,13 @@ defaultEntryPoints = ["https","http"]
   endpoint = "unix:///var/run/docker.sock"
   watch = true
   exposedByDefault = false
-  network = "traefik-backend" # be to use the correct network here
+  network = "traefik-backend" # ensure to use the correct network here
 
 # Let's Encrypt stuff below this point:
 [acme]
   email = "admin@foo.com"
   storage = "/acme.json"
-  acmeLogging = true       # Helps ifthere are issues with certificates
+  acmeLogging = true       # Helps if there are issues with certificates
   entryPoint = "https"
 
   [acme.dnsChallenge]
@@ -164,7 +164,7 @@ defaultEntryPoints = ["https","http"]
 
   [[acme.domains]]
     main = "*.foo-pages.com"
-#    sans = ["flowerwcs.com"]     # uncomment if you want to host 
+#    sans = ["foo-pages.com"]     # uncomment if you also want to host 
                                   # https://foo-pages.com on this server
   [[acme.domains]]
     main = "gitlab.foo.com"       # again, adjust if you also want to
@@ -179,7 +179,7 @@ If you run
 $> docker-compose up
 ```
 
-you should see that traefik is starting up and is requesting certifiates for configured domains from Let's Encrypt.
+you should see that traefik is starting up and is requesting certificates for configured domains from Let's Encrypt.
 
 If you access one of you domains, you should be redirected to HTTPS and get a 404 error. In the traefik log, you will see that no backend is configured. That's OK for now.
 
@@ -189,7 +189,7 @@ Now to the Gitlab Behemoth....
 
 Currently, I keep everything configured in a single docker-compose file, no external configuration files or environment vars are required. 
 
-All date is stored below `/srv` on the host system. 
+All data is stored below `/srv` on the host system. 
 
 ```yaml
 # GITLAB compose file
